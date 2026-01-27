@@ -69,6 +69,16 @@ apps:
         - livekit-vyom.indusnettechnologies.com
         - turn-livekit-vyom.indusnettechnologies.com
         - whip-livekit-vyom.indusnettechnologies.com
+  http:
+    servers:
+      redirect:
+        listen: [":80"]
+        routes:
+          - handle:
+              - handler: static_response
+                headers:
+                  Location: ["https://{http.request.host}{http.request.uri}"]
+                status_code: 301
   layer4:
     servers:
       main:
