@@ -19,31 +19,10 @@ apps:
         - whip-livekit-vyom.indusnettechnologies.com
 
   # -------------------------------
-  # HTTP / HTTPS (Browser traffic)
+  # HTTP (Port 80 Redirects Only)
   # -------------------------------
   http:
     servers:
-      main:
-        routes:
-          # LiveKit API / WebSocket
-          - match:
-              - host:
-                  - livekit-vyom.indusnettechnologies.com
-            handle:
-              - handler: reverse_proxy
-                upstreams:
-                  - dial: ["localhost:7880"]
-
-          # WHIP endpoint
-          - match:
-              - host:
-                  - whip-livekit-vyom.indusnettechnologies.com
-            handle:
-              - handler: reverse_proxy
-                upstreams:
-                  - dial: ["localhost:8080"]
-
-      # HTTP → HTTPS redirect
       redirect:
         listen:
           - ":80"
@@ -56,14 +35,15 @@ apps:
                     - "https://{http.request.host}{http.request.uri}"
 
   # -------------------------------
-  # Layer4 (TURN over TLS)
+  # Layer 4 (Multiplexed Port 443)
   # -------------------------------
   layer4:
     servers:
-      turn:
+      main:
         listen:
           - ":443"
         routes:
+          # TURN over TLS
           - match:
               - tls:
                   sni:
@@ -73,3 +53,29 @@ apps:
               - handler: proxy
                 upstreams:
                   - dial: ["localhost:5349"]
+
+          # LiveKit API / WebSocket
+          - match:
+              - tls:
+                  sni:
+                    - livekit-vyom.indusnettechnologies.com
+            handle:
+              - handler: tls
+                connection_policies:
+                  - alpn: ["http/1.1"]
+              - handler: proxy
+                upstreams:
+                  - dial: ["localhost:7880"]
+
+          # WHIP (Ingress)
+          - match:
+              - tls:
+                  sni:
+                    - whip-livekit-vyom.indusnettechnologies.com
+            handle:
+              - handler: tls
+                connection_policies:
+                  - alpn: ["http/1.1"]
+              - handler: proxy
+                upstreams:
+                  - dial: ["localhost:8080"]
