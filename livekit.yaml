@@ -1,32 +1,38 @@
 port: 7880
 bind_addresses:
-    - "0.0.0.0"
+  - "0.0.0.0"
+
 rtc:
-    tcp_port: 7881
-    port_range_start: 50000
-    port_range_end: 60000
-    use_external_ip: true
-    enable_loopback_candidate: false
+  tcp_port: 7881
+  port_range_start: 50000
+  port_range_end: 60000
+  use_external_ip: true
+  enable_loopback_candidate: false
+
 redis:
-    address: localhost:6379
-    username: ""
-    password: ""
-    db: 0
-    use_tls: false
-    sentinel_master_name: ""
-    sentinel_username: ""
-    sentinel_password: ""
-    sentinel_addresses: []
-    cluster_addresses: []
-    max_redirects: null
+  address: "localhost:6379"
+  username: ""
+  password: ""
+  db: 0
+  use_tls: false
+  sentinel_master_name: ""
+  sentinel_username: ""
+  sentinel_password: ""
+  sentinel_addresses: []
+  cluster_addresses: []
+  max_redirects: null
+
 turn:
-    enabled: true
-    domain: turn-livekit-vyom.indusnettechnologies.com
-    tls_port: 5349
-    udp_port: 3478
-    external_tls: true
+  enabled: true
+  domain: "turn-livekit-vyom.indusnettechnologies.com"
+  tls_port: 5349
+  udp_port: 3478
+  external_tls: true
+
 ingress:
-    rtmp_base_url: rtmp://livekit-vyom.indusnettechnologies.com:1935/x
-    whip_base_url: https://whip-livekit-vyom.indusnettechnologies.com/w
+  rtmp_base_url: "rtmp://livekit-vyom.indusnettechnologies.com:1935/x"
+  whip_base_url: "https://whip-livekit-vyom.indusnettechnologies.com/w"
+
 keys:
-    APID8LynJKrhDzo: 7RcURNf1t5jMaJOfB5yDeP3Rvz1XL8VXRWeEP3WSATvA
+  APID8LynJKrhDzo: "7RcURNf1t5jMaJOfB5yDeP3Rvz1XL8VXRWeEP3WSATvA"
+
